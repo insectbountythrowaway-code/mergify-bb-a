@@ -1,15 +1,7 @@
-queue_rules:
-  - name: default
-    merge_conditions:
-      - check-success=ci
-    batch_size: 1
-    merge_method: merge
-    max_checks_retries: 1
 pull_request_rules:
-  - name: queue on approval+label
-    conditions:
-      - "#approved-reviews-by>=1"
-      - label=queue-me
-    actions:
-      queue:
-        name: default
+  - name: dismiss approvals on new commit
+    conditions: [base=main]
+    actions: { dismiss_reviews: { approved: true } }
+  - name: merge on one approval
+    conditions: ["#approved-reviews-by>=1", label=s2]
+    actions: { merge: { method: merge } }
